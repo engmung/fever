@@ -1,43 +1,43 @@
-body {
-  margin: 0;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-}
-
-.App {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-}
-
 #controls {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 1vw;
+  /* 20px in 1920px height */
+  left: 1.9vw;
+  /* 20px in 1080px width */
   background: white;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 0.9vw;
+  /* 10px in 1080px width */
+  border-radius: 0.5vw;
+  /* 5px in 1080px width */
+  box-shadow: 0 0 0.9vw rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
 
 #controls label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 0.5vw;
+  /* 5px in 1080px width */
+  font-size: 1.5vw;
+  /* Adjust as needed */
 }
 
 #controls input[type="range"] {
-  width: 200px;
+  width: 18.5vw;
+  /* 200px in 1080px width */
 }
 
 #gauge {
   position: absolute;
-  bottom: 20px;
+  bottom: 2.1vw;
+  /* 40px in 1920px height */
   left: 50%;
   transform: translateX(-50%);
-  width: 300px;
-  height: 60px;
+  width: 55.6vw;
+  /* 600px in 1080px width */
+  height: 6.25vw;
+  /* 120px in 1920px height */
   background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  border-radius: 1.9vw;
+  /* 20px in 1080px width */
   z-index: 10;
 }

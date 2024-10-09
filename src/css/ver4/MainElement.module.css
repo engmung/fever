@@ -1,0 +1,197 @@
+.mainElement {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.movingElements {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainImage {
+  position: relative;
+  width: 39%;
+  height: auto;
+  z-index: 2;
+}
+
+.orbitImage {
+  position: absolute;
+  height: auto;
+  transition: all 0.3s ease;
+}
+
+.orbitFront {
+  top: 37%;
+  right: 14%;
+  z-index: 3;
+  width: 60%;
+}
+
+.orbitBack {
+  top: 28%;
+  left: 10%;
+  z-index: 1;
+  width: 74%;
+}
+
+.squishyAppear {
+  animation: squishyAppear 0.5s ease-out;
+}
+
+@keyframes squishyAppear {
+  0% {
+    transform: scale(0);
+  }
+
+  60% {
+    transform: scale(1.2);
+  }
+
+  80% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.floatingMain {
+  animation: floatMain 2s ease-in-out infinite;
+}
+
+.floatingOrbit {
+  animation: floatOrbit 2s ease-in-out infinite;
+}
+
+@keyframes floatMain {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes floatOrbit {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.shaking {
+  animation: shake 1s ease-in-out;
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-50px);
+  }
+
+  40% {
+    transform: translateX(50px);
+  }
+
+  60% {
+    transform: translateX(-25px);
+  }
+
+  80% {
+    transform: translateX(25px);
+  }
+}
+
+.hitEffect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+}
+
+.hitCircle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(0, 255, 0) 20%, rgb(60, 60, 255) 90%, rgba(189, 189, 255, 0) 100%);
+  opacity: 0.9;
+  transform: scale(0);
+  animation: hitAnimation 3s ease-out;
+}
+
+@keyframes hitAnimation {
+  0% {
+    opacity: 0.3;
+    transform: scale(0);
+  }
+
+  30% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+
+  80% {
+    opacity: 0.02;
+    transform: scale(1.3);
+  }
+
+  100% {
+    opacity: 0.0;
+    transform: scale(1.35);
+  }
+}
+
+.squishyAppear {
+  animation: squishyAppear 0.7s ease-out;
+}
+
+@keyframes squishyAppear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+
+  70% {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+
+  90% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

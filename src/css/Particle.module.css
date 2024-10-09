@@ -1,0 +1,31 @@
+.particle {
+    position: absolute;
+    background-color: white;
+    border-radius: 0.4vw;
+}
+
+.particle1 {
+    width: 1.6vw;
+    height: 1.6vw;
+    border: 0.2vw solid #46a3ff;
+}
+
+.particle2 {
+    width: 2.2vw;
+    height: 2.2vw;
+    border: 0.2vw solid #00cc00;
+}
+
+.particle3 {
+    width: 3.2vw;
+    height: 3.2vw;
+    border: 0.2vw solid #ff0000;
+}
+
+.confetti {
+    position: absolute;
+    width: 1.8vw;
+    height: 1.8vw;
+    opacity: 0.7;
+    transition: transform 0.3s ease;
+}
