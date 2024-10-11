@@ -1,6 +1,8 @@
+// File: src/App.js
+
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import ArduinoConnector from './components/ArduinoConnector';
+import Layout from './components/Layout'; // Layout 컴포넌트 import
 import Particle from "./components/Particle";
 import './App.css';
 
@@ -23,6 +25,9 @@ import MainElementV3 from "./components/ver3/MainElement";
 import BackgroundV4 from "./components/ver4/Background";
 import GaugeV4 from "./components/ver4/Gauge";
 import MainElementV4 from "./components/ver4/MainElement";
+
+// Import Controls (백업 컴포넌트)
+import Controls from "./components/Controls";
 
 const VersionedComponents = React.memo(({ BackgroundComponent, GaugeComponent, MainElementComponent, sensorValue, mode }) => (
   <>
@@ -55,7 +60,7 @@ function App() {
       timer = setTimeout(() => {
         setIsCompleted(false);
         setSensorValue(0);
-      }, 10000);
+      }, 10000); // 10초 후 초기화
     }
     return () => {
       if (timer) {
@@ -71,10 +76,14 @@ function App() {
 
   return (
     <Router>
-      <div className="app-container">
-        <ArduinoConnector setSensorValue={setSensorValue} />
-        <Routes>
-          <Route path="/ver1" element={
+      <Routes>
+        {/* Layout 컴포넌트로 모든 경로를 감쌉니다 */}
+        <Route path="/" element={<Layout sensorValue={sensorValue} setSensorValue={setSensorValue} mode={mode} />}>
+          {/* 인덱스 라우트 추가: 루트 경로('/')에 접근 시 '/ver1'으로 리다이렉트 */}
+          <Route index element={<Navigate to="/ver1" replace />} />
+
+          {/* Version 1 Routes */}
+          <Route path="ver1" element={
             <VersionedComponents
               {...versionProps}
               BackgroundComponent={Background}
@@ -82,7 +91,17 @@ function App() {
               MainElementComponent={MainElement}
             />
           } />
-          <Route path="/ver2" element={
+          <Route path="ver1/x" element={
+            <VersionedComponents
+              {...versionProps}
+              BackgroundComponent={Background}
+              GaugeComponent={Gauge}
+              MainElementComponent={MainElement}
+            />
+          } />
+
+          {/* Version 2 Routes */}
+          <Route path="ver2" element={
             <VersionedComponents
               {...versionProps}
               BackgroundComponent={BackgroundV2}
@@ -90,7 +109,17 @@ function App() {
               MainElementComponent={MainElementV2}
             />
           } />
-          <Route path="/ver3" element={
+          <Route path="ver2/x" element={
+            <VersionedComponents
+              {...versionProps}
+              BackgroundComponent={BackgroundV2}
+              GaugeComponent={GaugeV2}
+              MainElementComponent={MainElementV2}
+            />
+          } />
+
+          {/* Version 3 Routes */}
+          <Route path="ver3" element={
             <VersionedComponents
               {...versionProps}
               BackgroundComponent={BackgroundV3}
@@ -98,7 +127,17 @@ function App() {
               MainElementComponent={MainElementV3}
             />
           } />
-          <Route path="/ver4" element={
+          <Route path="ver3/x" element={
+            <VersionedComponents
+              {...versionProps}
+              BackgroundComponent={BackgroundV3}
+              GaugeComponent={GaugeV3}
+              MainElementComponent={MainElementV3}
+            />
+          } />
+
+          {/* Version 4 Routes */}
+          <Route path="ver4" element={
             <VersionedComponents
               {...versionProps}
               BackgroundComponent={BackgroundV4}
@@ -106,9 +145,19 @@ function App() {
               MainElementComponent={MainElementV4}
             />
           } />
+          <Route path="ver4/x" element={
+            <VersionedComponents
+              {...versionProps}
+              BackgroundComponent={BackgroundV4}
+              GaugeComponent={GaugeV4}
+              MainElementComponent={MainElementV4}
+            />
+          } />
+
+          {/* 알 수 없는 경로는 /ver1으로 리다이렉트 */}
           <Route path="*" element={<Navigate to="/ver1" replace />} />
-        </Routes>
-      </div>
+        </Route>
+      </Routes>
     </Router>
   );
 }
