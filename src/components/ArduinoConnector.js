@@ -9,11 +9,11 @@ const ArduinoConnector = ({ setSensorValue }) => {
     setIsCompleted(true);
     setSensorValue(100);
     
-    // 12초 후에 초기화
+    // 16초 후에 초기화
     setTimeout(() => {
       setIsCompleted(false);
       setSensorValue(0);
-    }, 12000);
+    }, 16000);
   }, [setSensorValue]);
 
   useEffect(() => {

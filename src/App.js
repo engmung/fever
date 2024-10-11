@@ -1,8 +1,6 @@
-// File: src/App.js
-
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import Layout from './components/Layout'; // Layout 컴포넌트 import
+import Layout from './components/Layout';
 import Particle from "./components/Particle";
 import './App.css';
 
@@ -26,9 +24,6 @@ import BackgroundV4 from "./components/ver4/Background";
 import GaugeV4 from "./components/ver4/Gauge";
 import MainElementV4 from "./components/ver4/MainElement";
 
-// Import Controls (백업 컴포넌트)
-import Controls from "./components/Controls";
-
 const VersionedComponents = React.memo(({ BackgroundComponent, GaugeComponent, MainElementComponent, sensorValue, mode }) => (
   <>
     <BackgroundComponent mode={mode} />
@@ -43,6 +38,7 @@ const VersionedComponents = React.memo(({ BackgroundComponent, GaugeComponent, M
 function App() {
   const [sensorValue, setSensorValue] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showCredit, setShowCredit] = useState(false);
 
   const getMode = useCallback((value) => {
     if (isCompleted) return "complete";
@@ -58,14 +54,18 @@ function App() {
     if (sensorValue === 100) {
       setIsCompleted(true);
       timer = setTimeout(() => {
+        setShowCredit(true);
+      }, 1000);
+
+      // 15초 후에 모든 상태 초기화
+      setTimeout(() => {
         setIsCompleted(false);
         setSensorValue(0);
-      }, 10000); // 10초 후 초기화
+        setShowCredit(false);
+      }, 15000);
     }
     return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
+      if (timer) clearTimeout(timer);
     };
   }, [sensorValue]);
 
@@ -76,88 +76,97 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        {/* Layout 컴포넌트로 모든 경로를 감쌉니다 */}
-        <Route path="/" element={<Layout sensorValue={sensorValue} setSensorValue={setSensorValue} mode={mode} />}>
-          {/* 인덱스 라우트 추가: 루트 경로('/')에 접근 시 '/ver1'으로 리다이렉트 */}
-          <Route index element={<Navigate to="/ver1" replace />} />
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<Layout sensorValue={sensorValue} setSensorValue={setSensorValue} mode={mode} />}>
+            <Route index element={<Navigate to="/ver1" replace />} />
+            
+            {/* Version 1 Routes */}
+            <Route path="ver1" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={Background}
+                GaugeComponent={Gauge}
+                MainElementComponent={MainElement}
+              />
+            } />
+            <Route path="ver1/x" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={Background}
+                GaugeComponent={Gauge}
+                MainElementComponent={MainElement}
+              />
+            } />
 
-          {/* Version 1 Routes */}
-          <Route path="ver1" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={Background}
-              GaugeComponent={Gauge}
-              MainElementComponent={MainElement}
-            />
-          } />
-          <Route path="ver1/x" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={Background}
-              GaugeComponent={Gauge}
-              MainElementComponent={MainElement}
-            />
-          } />
+            {/* Version 2 Routes */}
+            <Route path="ver2" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={BackgroundV2}
+                GaugeComponent={GaugeV2}
+                MainElementComponent={MainElementV2}
+              />
+            } />
+            <Route path="ver2/x" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={BackgroundV2}
+                GaugeComponent={GaugeV2}
+                MainElementComponent={MainElementV2}
+              />
+            } />
 
-          {/* Version 2 Routes */}
-          <Route path="ver2" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={BackgroundV2}
-              GaugeComponent={GaugeV2}
-              MainElementComponent={MainElementV2}
-            />
-          } />
-          <Route path="ver2/x" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={BackgroundV2}
-              GaugeComponent={GaugeV2}
-              MainElementComponent={MainElementV2}
-            />
-          } />
+            {/* Version 3 Routes */}
+            <Route path="ver3" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={BackgroundV3}
+                GaugeComponent={GaugeV3}
+                MainElementComponent={MainElementV3}
+              />
+            } />
+            <Route path="ver3/x" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={BackgroundV3}
+                GaugeComponent={GaugeV3}
+                MainElementComponent={MainElementV3}
+              />
+            } />
 
-          {/* Version 3 Routes */}
-          <Route path="ver3" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={BackgroundV3}
-              GaugeComponent={GaugeV3}
-              MainElementComponent={MainElementV3}
-            />
-          } />
-          <Route path="ver3/x" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={BackgroundV3}
-              GaugeComponent={GaugeV3}
-              MainElementComponent={MainElementV3}
-            />
-          } />
+            {/* Version 4 Routes */}
+            <Route path="ver4" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={BackgroundV4}
+                GaugeComponent={GaugeV4}
+                MainElementComponent={MainElementV4}
+              />
+            } />
+            <Route path="ver4/x" element={
+              <VersionedComponents
+                {...versionProps}
+                BackgroundComponent={BackgroundV4}
+                GaugeComponent={GaugeV4}
+                MainElementComponent={MainElementV4}
+              />
+            } />
 
-          {/* Version 4 Routes */}
-          <Route path="ver4" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={BackgroundV4}
-              GaugeComponent={GaugeV4}
-              MainElementComponent={MainElementV4}
+            <Route path="*" element={<Navigate to="/ver1" replace />} />
+          </Route>
+        </Routes>
+        {showCredit && (
+          <>
+            <div className="dimmed-background" />
+            <img 
+              src="/images/credit.png" 
+              alt="Credit" 
+              className="credit-image"
             />
-          } />
-          <Route path="ver4/x" element={
-            <VersionedComponents
-              {...versionProps}
-              BackgroundComponent={BackgroundV4}
-              GaugeComponent={GaugeV4}
-              MainElementComponent={MainElementV4}
-            />
-          } />
-
-          {/* 알 수 없는 경로는 /ver1으로 리다이렉트 */}
-          <Route path="*" element={<Navigate to="/ver1" replace />} />
-        </Route>
-      </Routes>
+          </>
+        )}
+      </div>
     </Router>
   );
 }
