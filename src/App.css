@@ -20,7 +20,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 120%;
+  width: 140%;
   height: auto;
   z-index: 1001;
   animation: creditRise 10s ease-out 3s forwards;
@@ -46,7 +46,7 @@
 
   50%,
   100% {
-    bottom: 20%;
+    bottom: 0%;
     /* 60% 올라온 지점 */
   }
 }

@@ -11,8 +11,9 @@
 
 .mainImageContainer {
   position: relative;
-  width: 84%;
+  width: 90%;
   height: auto;
+  left: 7%;
   top: -48%;
   z-index: 2;
 }

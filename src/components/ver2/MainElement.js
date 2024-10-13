@@ -10,13 +10,12 @@ const MainElement = React.memo(({ sensorValue, mode }) => {
   const lastValueRef = useRef(sensorValue);
   const lastHitTimeRef = useRef(0);
   const rotationTimeoutRef = useRef(null);
-  const rotationIntervalRef = useRef(null);
   const prevModeRef = useRef();
   const rotationCountRef = useRef(0);
 
   const MIN_HIT_DELAY = 500;
-  const TOTAL_IMAGES = 4;
-  const ROTATION_DURATION = 300; // 1 second for full rotation
+  const TOTAL_IMAGES = 5;
+  const ROTATION_DURATION = 1000;
   const ROTATION_INTERVAL = ROTATION_DURATION / TOTAL_IMAGES;
 
   const createHitEffect = useCallback(() => {
@@ -44,7 +43,7 @@ const MainElement = React.memo(({ sensorValue, mode }) => {
     };
 
     rotate();
-  }, [isRotating, TOTAL_IMAGES, ROTATION_INTERVAL]);
+  }, [isRotating]);
 
   useEffect(() => {
     if (prevModeRef.current === "complete" && mode !== "complete") {
