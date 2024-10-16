@@ -13,7 +13,7 @@ const ArduinoConnector = ({ setSensorValue }) => {
     setTimeout(() => {
       setIsCompleted(false);
       setSensorValue(0);
-    }, 16000);
+    }, 15000);
   }, [setSensorValue]);
 
   useEffect(() => {

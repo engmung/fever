@@ -15,7 +15,7 @@ const MainElement = React.memo(({ sensorValue, mode }) => {
 
   const MIN_HIT_DELAY = 500;
   const TOTAL_IMAGES = 5;
-  const ROTATION_DURATION = 1000;
+  const ROTATION_DURATION = 500;
   const ROTATION_INTERVAL = ROTATION_DURATION / TOTAL_IMAGES;
 
   const createHitEffect = useCallback(() => {

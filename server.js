@@ -19,6 +19,8 @@ const KNOWN_DEVICES = [
   // 필요한 경우 여기에 더 많은 장치를 추가할 수 있습니다.
 ];
 
+const RECONNECT_INTERVAL = 3000; // 3초마다 재연결 시도
+
 async function findArduinoPorts() {
   const ports = await SerialPort.list();
   return ports.filter(port => 
@@ -29,36 +31,54 @@ async function findArduinoPorts() {
   );
 }
 
+function setupSerialConnection(portInfo) {
+  const port = new SerialPort({ path: portInfo.path, baudRate: 9600 });
+  const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
+
+  console.log(`Connected to device on ${portInfo.path}`);
+
+  parser.on('data', (data) => {
+    const numericData = parseFloat(data);
+    if (!isNaN(numericData)) {
+      console.log(`Data from ${portInfo.path}:`, numericData);
+      wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(numericData.toString());
+        }
+      });
+    }
+  });
+
+  port.on('error', (err) => {
+    console.error(`Error on ${portInfo.path}:`, err.message);
+    setTimeout(() => reconnect(portInfo), RECONNECT_INTERVAL);
+  });
+
+  port.on('close', () => {
+    console.log(`Connection closed for ${portInfo.path}`);
+    setTimeout(() => reconnect(portInfo), RECONNECT_INTERVAL);
+  });
+
+  return port;
+}
+
+function reconnect(portInfo) {
+  console.log(`Attempting to reconnect to ${portInfo.path}...`);
+  setupSerialConnection(portInfo);
+}
+
 async function setupSerialConnections() {
   try {
     const arduinoPorts = await findArduinoPorts();
     
     if (arduinoPorts.length === 0) {
       console.log('No Arduino or compatible devices found');
+      setTimeout(setupSerialConnections, RECONNECT_INTERVAL);
       return;
     }
 
     arduinoPorts.forEach(portInfo => {
-      const port = new SerialPort({ path: portInfo.path, baudRate: 9600 });
-      const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
-
-      console.log(`Connected to device on ${portInfo.path}`);
-
-      parser.on('data', (data) => {
-        const numericData = parseFloat(data);
-        if (!isNaN(numericData)) {
-          console.log(`Data from ${portInfo.path}:`, numericData);
-          wss.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-              client.send(numericData.toString());
-            }
-          });
-        }
-      });
-
-      port.on('error', (err) => {
-        console.error(`Error on ${portInfo.path}:`, err.message);
-      });
+      setupSerialConnection(portInfo);
     });
 
     wss.on('connection', (ws) => {
@@ -70,6 +90,7 @@ async function setupSerialConnections() {
 
   } catch (error) {
     console.error('Error setting up serial connections:', error.message);
+    setTimeout(setupSerialConnections, RECONNECT_INTERVAL);
   }
 }
 
